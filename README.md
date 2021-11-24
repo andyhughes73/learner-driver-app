@@ -1,2 +1,2 @@
 # learner-driver-app
-learner driver details social app
+An app for learner driver details just to learn coding
