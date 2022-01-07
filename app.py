@@ -66,11 +66,23 @@ def login():
         else:
             if check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash("You've been logged in!", "success")
+                if (user.is_admin == 1):
+                    return redirect(url_for('admin'))
+                else:
+                    flash("You've been logged in!", "success")
                 return redirect(url_for('index'))
             else:
                 flash("Your email or password doesn't match!", "error")
     return render_template('login.html', form=form)
+
+
+@app.route('/admin', methods=('GET', 'POST'))
+@login_required
+def admin():
+    if (models.User.is_admin == True):
+        return render_template('admin.html')
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/logout')
@@ -164,6 +176,20 @@ def unfollow(username):
         else:
             flash("You've unfollowed {}!".format(to_user.username), "success")
     return redirect(url_for('stream', username=to_user.username))
+
+
+@app.route('/add_standard', methods=('GET', 'POST'))
+@login_required
+def set_standard():
+    form = forms.StandardForm()
+    if form.validate_on_submit():
+        models.Standards.create_standard(
+            section=form.section.data,
+            standard=form.standard.data
+        )
+        flash("Standard created! Thanks!", "success")
+        return redirect(url_for('index'))
+    return render_template('standards.html', form=form)
 
 
 @app.errorhandler(404)

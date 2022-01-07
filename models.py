@@ -1,10 +1,16 @@
 import datetime
 
+from flask import Flask
 from flask_bcrypt import generate_password_hash
 from flask_login import UserMixin
 from peewee import *
 
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'auoesh.bouoastuh.43,uoausoehuosth3ououea.auoub!'
+
 DATABASE = SqliteDatabase('ldriver.db')
+
 
 class User(UserMixin, Model):
     username = CharField(unique=True)
@@ -83,7 +89,47 @@ class Relationship(Model):
         )
 
 
+class Standards(Model):
+    section = CharField(unique=False)
+    standard = CharField(unique=True)
+    
+    class Meta:
+        database = DATABASE
+        
+    
+    @classmethod
+    def create_standard(cls, section, standard):
+        try:
+            with DATABASE.transaction():
+                cls.create(
+                    section=section,
+                    standard=standard
+                )
+        except IntegrityError:
+            raise ValueError("Standard already exists")
+        
+        
+class Faults(Model):
+    section = CharField()
+    fault = CharField()
+    
+    class Meta:
+        database = DATABASE
+        
+        
+    @classmethod
+    def create_faults(cls, section, fault):
+        try:
+            with DATABASE.transaction():
+                cls.create(
+                    section=section,
+                    fault=fault
+                    )
+        except IntegrityError:
+            raise ValueError("Fault already exists")
+
+
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([User, Post, Relationship], safe=True)
+    DATABASE.create_tables([User, Post, Relationship, Standards, Faults], safe=True)
     DATABASE.close()

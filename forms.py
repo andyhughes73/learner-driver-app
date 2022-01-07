@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
+from peewee import CharField
 from wtforms import StringField, PasswordField, TextAreaField
+from wtforms import validators
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
                                Length, EqualTo)
 
@@ -55,3 +57,13 @@ class LoginForm(FlaskForm):
 
 class PostForm(FlaskForm):
     content = TextAreaField("What's up?", validators=[DataRequired()])
+
+
+class StandardForm(FlaskForm):
+    section = TextAreaField('Set section title', validators=[DataRequired()])
+    standard = TextAreaField('Enter the standard to be added', validators=[DataRequired()])
+
+    
+class FaultForm(FlaskForm):
+    section = TextAreaField('Set section title', validators=[DataRequired()])
+    fault = TextAreaField('Enter fault', validators=[DataRequired()])
