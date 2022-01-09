@@ -1,0 +1,2 @@
+09-01-2022 - Can't render the 'standards.html' template inside of the 'admin.html' template.
+    - tried using url_for but that just displays the url. Tried using 'include' but that throws an error saying 'cannot find standards.html'. The standards file does exist within      the templates folder as it should.
