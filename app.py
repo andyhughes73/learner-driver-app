@@ -9,7 +9,7 @@ import models
 
 DEBUG = True
 PORT = 8000
-HOST = '0.0.0.0'
+HOST = 'localhost'
 
 app = Flask(__name__)
 app.secret_key = 'auoesh.bouoastuh.43,uoausoehuosth3ououea.auoub!'
@@ -76,13 +76,41 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/admin', methods=('GET', 'POST'))
+@app.route('/admin')
 @login_required
 def admin():
+    form = forms.StandardForm()
     if (models.User.is_admin == True):
-        return render_template('admin.html')
+        return render_template('admin.html', form=form)
     else:
         return redirect(url_for('index'))
+    
+    
+@app.route('/profile')
+@login_required
+def profile():
+    template = 'profile.html'
+    if (models.User.username == current_user):
+        return render_template('profile.html')
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/add_standard', methods=('GET', 'POST'))
+@login_required
+def set_standard():
+    form = forms.StandardForm()
+    if form.validate_on_submit():
+        models.Standards.create_standard(
+            section=form.section.data,
+            standard=form.standard.data
+        )
+        flash("Standard created! Thanks!", "success")
+        if (models.User.is_admin == True):
+            return render_template('admin.html')
+        else:
+            return redirect(url_for('index'))
+    return render_template('standards.html', form=form)
 
 
 @app.route('/logout')
@@ -131,6 +159,13 @@ def stream(username=None):
     return render_template(template, stream=stream, user=user)
 
 
+'''Creating the view for Standards table in database'''
+@app.route('/standards')
+def view_standards():
+    standards = models.Standards.select()
+    return render_template('standards-list.html', standards=standards)
+
+
 @app.route('/post/<int:post_id>')
 def view_post(post_id):
     posts = models.Post.select().where(models.Post.id == post_id)
@@ -176,20 +211,6 @@ def unfollow(username):
         else:
             flash("You've unfollowed {}!".format(to_user.username), "success")
     return redirect(url_for('stream', username=to_user.username))
-
-
-@app.route('/add_standard', methods=('GET', 'POST'))
-@login_required
-def set_standard():
-    form = forms.StandardForm()
-    if form.validate_on_submit():
-        models.Standards.create_standard(
-            section=form.section.data,
-            standard=form.standard.data
-        )
-        flash("Standard created! Thanks!", "success")
-        return redirect(url_for('index'))
-    return render_template('standards.html', form=form)
 
 
 @app.errorhandler(404)
