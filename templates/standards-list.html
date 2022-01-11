@@ -1,0 +1,10 @@
+{% extends "layout.html" %} {% block content %} {% for standard in standards %}
+<article>
+    <h2>
+        {{ standard.section }}
+    </h2>
+    <p>
+        {{ standard.standard }}
+    </p>
+</article>
+{% endfor %} {% endblock %}

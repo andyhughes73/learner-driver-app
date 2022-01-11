@@ -7,6 +7,7 @@
     <title>{% block title %}TwoCans{% endblock %}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/4e72aaddf2.js" crossorigin="anonymous"></script>
     <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/static/css/normalize.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
@@ -19,30 +20,32 @@
 
 <body>
 
-    <header>
+    <header class="header">
 
         <div class="row">
 
-            <div class="grid-33">
+            <div class="grid-33 center">
 
-                <a href="{{ url_for('index') }}" class="icon-logo">Logo</a>
+                <a href="{{ url_for('index') }}" class="icon-logo"><img src="static/img/gp-square-logo.jpg"></a>
 
             </div>
 
-            <div class="grid-33">
+            <div class="grid-33 center">
 
                 <!-- Say Hi -->
                 <h1>Hello{% if current_user.is_authenticated %} {{ current_user.username }}{% endif %}!</h1>
 
             </div>
 
-            <div class="grid-33">
+            <div class="grid-33 center">
 
                 <!-- Log in/Log out -->
                 {% if current_user.is_authenticated %}
-                <a href="{{ url_for('logout') }}" class="icon-power" title="Log out">Log Out</a> {% else %}
-                <a href="{{ url_for('login') }}" class="icon-power" title="Log in">Log In</a>
-                <a href="{{ url_for('register') }}" class="icon-profile" title="Register">Register</a> {% endif %}
+                <a href="{{ url_for('logout') }}" title="Log out"><button class="header-buttons small"><i class="fas fa-sign-out-alt"></i>
+                </button></a>
+                <a href="{{ url_for('profile') }}" title="{{ current_user.username }}}"><button class="header-buttons small"><i class="fas fa-user"></i></button></a> {% else %}
+                <a href="{{ url_for('login') }}" title="Log in"><button class="header-buttons small"><i class="fas fa-sign-out-alt"></i></button></a>
+                <a href="{{ url_for('register') }}" title="Register"><button class="header-buttons small"><i class="fas fa-user-plus"></i></button></a> {% endif %}
 
             </div>
 

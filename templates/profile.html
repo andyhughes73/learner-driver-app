@@ -1,6 +1,6 @@
 {% extends 'layout.html' %} {% from 'macros.html' import render_field %} {% block content %}
 <div class="row">
-    <h1>Welcome to the admin page!</h1>
+    <h1>Profile: {{ current_user.username }}</h1>
+    <button type="submit" id="submit"><a href="{{ url_for('set_standard') }}" class="icon-power" title="Add Standard">Add A Standard</a></button>
     <button type="submit" id="submit"><a href="{{ url_for('view_standards') }}" class="icon-profile" title="view standards">View Driver Standards</a></button>
-</div>
-{% include'standards.html' %} {% endblock content %}
+</div> {% endblock content %}

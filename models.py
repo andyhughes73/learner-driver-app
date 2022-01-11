@@ -106,7 +106,7 @@ class Standards(Model):
                     standard=standard
                 )
         except IntegrityError:
-            raise ValueError("Standard already exists")
+            raise ValueError("Section or Standard already exists")
         
         
 class Faults(Model):

@@ -5,7 +5,7 @@ from wtforms import validators
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email,
                                Length, EqualTo)
 
-from models import User
+from models import Standards, User
 
 
 def name_exists(form, field):
@@ -16,6 +16,16 @@ def name_exists(form, field):
 def email_exists(form, field):
     if User.select().where(User.email == field.data).exists():
         raise ValidationError('User with that email already exists.')
+
+
+def section_exists(form, field):
+    if Standards.select().where(Standards.section == field.data).exists():
+        raise ValidationError('That section already exists, please try again')
+
+
+def standard_exists(form, field):
+    if Standards.select().where(Standards.standard == field.data).exists():
+        raise ValidationError('That standard already exists, please try again!')
 
 
 class RegisterForm(FlaskForm):
@@ -60,8 +70,8 @@ class PostForm(FlaskForm):
 
 
 class StandardForm(FlaskForm):
-    section = TextAreaField('Set section title', validators=[DataRequired()])
-    standard = TextAreaField('Enter the standard to be added', validators=[DataRequired()])
+    section = TextAreaField('Set section title', validators=[DataRequired(), section_exists])
+    standard = TextAreaField('Enter the standard to be added', validators=[DataRequired(), standard_exists])
 
     
 class FaultForm(FlaskForm):
